@@ -263,7 +263,7 @@ exports.adjustStock = async (req, res, next) => {
     const stockBefore = product.stock;
     const difference = newStock - stockBefore;
 
-    // Évaliser que le nouveau stock n'est pas négatif
+    // Vérifier que le nouveau stock n'est pas négatif
     if (newStock < 0) {
       return res.status(400).json({
         success: false,
