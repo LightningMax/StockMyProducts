@@ -21,7 +21,7 @@ const router = express.Router();
 router.get('/stats', authMiddleware, roleMiddleware('admin'), getUserStats);
 
 // Obtenir tous les utilisateurs
-router.get('/', authMiddleware, roleMiddleware('admin', 'manager'), getAllUsers);
+router.get('/', authMiddleware, roleMiddleware('admin'), getAllUsers);
 
 // Obtenir un utilisateur par ID
 router.get('/:id', authMiddleware, roleMiddleware('admin', 'manager'), validateMongoId, getUserById);

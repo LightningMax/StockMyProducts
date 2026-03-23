@@ -85,7 +85,7 @@ async function runAllTests() {
   const managerEmail = `manager-${Date.now()}@test.com`;
   const userEmail = `user-${Date.now()}@test.com`;
   
-  let adminToken, adminId, managerToken, userId;
+  let adminToken, adminId, managerToken, userToken, userId;
   let categoryId, productId, secondProductId;
 
   try {
@@ -126,6 +126,7 @@ async function runAllTests() {
       role: 'user',
     });
     test('Register regular user', res.status === 201, 'User registration failed');
+    userToken = res.body.data.token;
     userId = res.body.data.user._id;
 
     // Login
