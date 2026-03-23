@@ -37,7 +37,7 @@ const stockMovementSchema = new mongoose.Schema(
     details: {
       type: String,
       trim: true,
-      maxlength: [500, 'Los détails ne peuvent pas dépasser 500 caractères'],
+      maxlength: [500, 'Les détails ne peuvent pas dépasser 500 caractères'],
     },
     // Stock avant le mouvement
     stockBefore: {
