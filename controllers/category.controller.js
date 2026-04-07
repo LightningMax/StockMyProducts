@@ -1,4 +1,4 @@
-const Category = require('../models/Category');
+const Category = require("../models/Category");
 
 /**
  * Obtenir toutes les catégories
@@ -29,7 +29,7 @@ exports.getCategoryById = async (req, res, next) => {
     if (!category || category.isDeleted) {
       return res.status(404).json({
         success: false,
-        message: 'Catégorie non trouvée',
+        message: "Catégorie non trouvée",
       });
     }
 
@@ -51,15 +51,15 @@ exports.createCategory = async (req, res, next) => {
     const { name, description } = req.body;
 
     // Vérifier si la catégorie existe déjà
-    const existingCategory = await Category.findOne({ 
-      name: { $regex: `^${name}$`, $options: 'i' },
-      isDeleted: false 
+    const existingCategory = await Category.findOne({
+      name: { $regex: `^${name}$`, $options: "i" },
+      isDeleted: false,
     });
-    
+
     if (existingCategory) {
       return res.status(400).json({
         success: false,
-        message: 'Une catégorie avec ce nom existe déjà',
+        message: "Une catégorie avec ce nom existe déjà",
       });
     }
 
@@ -70,7 +70,7 @@ exports.createCategory = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: 'Catégorie créée avec succès',
+      message: "Catégorie créée avec succès",
       data: category,
     });
   } catch (error) {
@@ -86,22 +86,25 @@ exports.updateCategory = async (req, res, next) => {
   try {
     const { name, description } = req.body;
 
-    const category = await Category.findByIdAndUpdate(
-      req.params.id,
-      { name, description, updatedAt: Date.now() },
-      { new: true, runValidators: true }
-    );
-
-    if (!category || category.isDeleted) {
+    // Vérifier que la catégorie existe et n'est pas supprimée
+    const categoryExists = await Category.findById(req.params.id);
+    if (!categoryExists || categoryExists.isDeleted) {
       return res.status(404).json({
         success: false,
-        message: 'Catégorie non trouvée',
+        message: "Catégorie non trouvée",
       });
     }
 
+    // Mettre à jour la catégorie
+    const category = await Category.findByIdAndUpdate(
+      req.params.id,
+      { name, description, updatedAt: Date.now() },
+      { new: true, runValidators: true },
+    );
+
     res.status(200).json({
       success: true,
-      message: 'Catégorie mise à jour avec succès',
+      message: "Catégorie mise à jour avec succès",
       data: category,
     });
   } catch (error) {
@@ -118,19 +121,19 @@ exports.deleteCategory = async (req, res, next) => {
     const category = await Category.findByIdAndUpdate(
       req.params.id,
       { isDeleted: true, updatedAt: Date.now() },
-      { new: true }
+      { new: true },
     );
 
     if (!category) {
       return res.status(404).json({
         success: false,
-        message: 'Catégorie non trouvée',
+        message: "Catégorie non trouvée",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Catégorie supprimée avec succès',
+      message: "Catégorie supprimée avec succès",
     });
   } catch (error) {
     next(error);

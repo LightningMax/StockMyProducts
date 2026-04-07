@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require("../models/User");
 
 /**
  * Obtenir tous les utilisateurs
@@ -29,7 +29,7 @@ exports.getUserById = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'Utilisateur non trouvé',
+        message: "Utilisateur non trouvé",
       });
     }
 
@@ -51,10 +51,10 @@ exports.updateUser = async (req, res, next) => {
     const { firstName, lastName, email, role } = req.body;
 
     // Vérifier que l'utilisateur ne modifie pas son propre rôle
-    if (role && req.user.id !== req.params.id && req.user.role !== 'admin') {
+    if (role && req.user.id !== req.params.id && req.user.role !== "admin") {
       return res.status(403).json({
         success: false,
-        message: 'Seul un administrateur peut changer les rôles',
+        message: "Seul un administrateur peut changer les rôles",
       });
     }
 
@@ -67,7 +67,9 @@ exports.updateUser = async (req, res, next) => {
     };
 
     // Supprimer les champs undefined
-    Object.keys(updateData).forEach((key) => updateData[key] === undefined && delete updateData[key]);
+    Object.keys(updateData).forEach(
+      (key) => updateData[key] === undefined && delete updateData[key],
+    );
 
     const user = await User.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
@@ -77,13 +79,13 @@ exports.updateUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'Utilisateur non trouvé',
+        message: "Utilisateur non trouvé",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Utilisateur mis à jour avec succès',
+      message: "Utilisateur mis à jour avec succès",
       data: user,
     });
   } catch (error) {
@@ -100,47 +102,20 @@ exports.deactivateUser = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       req.params.id,
       { isActive: false, updatedAt: Date.now() },
-      { new: true }
+      { new: true },
     );
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'Utilisateur non trouvé',
+        message: "Utilisateur non trouvé",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Utilisateur désactivé avec succès',
+      message: "Utilisateur désactivé avec succès",
       data: user,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-/**
- * Obtenir les statistiques des utilisateurs
- * GET /api/users/stats/overview
- */
-exports.getUserStats = async (req, res, next) => {
-  try {
-    const totalUsers = await User.countDocuments({ isActive: true });
-    const adminCount = await User.countDocuments({ role: 'admin', isActive: true });
-    const managerCount = await User.countDocuments({ role: 'manager', isActive: true });
-    const userCount = await User.countDocuments({ role: 'user', isActive: true });
-
-    res.status(200).json({
-      success: true,
-      data: {
-        totalUsers,
-        byRole: {
-          admin: adminCount,
-          manager: managerCount,
-          user: userCount,
-        },
-      },
     });
   } catch (error) {
     next(error);
