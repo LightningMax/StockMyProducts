@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "StockMyProducts API",
-    "description": "Complete REST API for Stock Management with JWT Authentication and RBAC",
+    "name": "StockMyProducts API - Simple Test Collection",
+    "description": "Easy-to-use REST API for Stock Management - No complex setup needed!",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -10,24 +10,7 @@
       "description": "User registration, login, and account management",
       "item": [
         {
-          "name": "Register User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('jwt_token', jsonData.data.token);",
-                  "    pm.environment.set('user_id', jsonData.data.user.id);",
-                  "    console.log('✅ User registered successfully. Token saved.');",
-                  "} else {",
-                  "    console.log('❌ Registration failed');",
-                  "}"
-                ]
-              }
-            }
-          ],
+          "name": "Register New User",
           "request": {
             "method": "POST",
             "header": [
@@ -38,34 +21,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"firstName\": \"Jean\", \"lastName\": \"Dupont\", \"email\": \"jean@example.com\", \"password\": \"password123\", \"role\": \"user\"}"
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@test.com\",\n  \"password\": \"test123\",\n  \"role\": \"user\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/auth/register",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "register"]
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
             }
           }
         },
         {
           "name": "Login User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('jwt_token', jsonData.data.token);",
-                  "    pm.environment.set('user_id', jsonData.data.user.id);",
-                  "    console.log('✅ Login successful. JWT Token saved: ' + jsonData.data.token.substring(0, 20) + '...');",
-                  "} else {",
-                  "    console.log('❌ Login failed');",
-                  "}"
-                ]
-              }
-            }
-          ],
           "request": {
             "method": "POST",
             "header": [
@@ -76,24 +44,26 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"email\": \"jean@example.com\", \"password\": \"password123\"}"
+              "raw": "{\n  \"email\": \"john.doe@test.com\",\n  \"password\": \"test123\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/auth/login",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "login"]
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
             }
           }
         },
         {
-          "name": "Get Current User (Me)",
+          "name": "Get Current User",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -101,9 +71,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/auth/me",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "me"]
+              "raw": "http://localhost:5000/api/auth/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "me"]
             }
           }
         }
@@ -111,7 +83,7 @@
     },
     {
       "name": "Users Management",
-      "description": "User CRUD operations and statistics (Admin/Manager only)",
+      "description": "User CRUD operations",
       "item": [
         {
           "name": "Get All Users",
@@ -121,7 +93,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -129,9 +101,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/users",
-              "host": ["{{base_url}}"],
-              "path": ["users"]
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users"]
             }
           }
         },
@@ -143,7 +117,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -151,9 +125,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/users/{{user_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["users", "{{user_id}}"]
+              "raw": "http://localhost:5000/api/users/user123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users", "user123"]
             }
           }
         },
@@ -165,7 +141,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -179,12 +155,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"firstName\": \"Jean\", \"lastName\": \"Dupont Updated\", \"email\": \"jean.updated@example.com\"}"
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"email\": \"jane.smith@test.com\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/users/{{user_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["users", "{{user_id}}"]
+              "raw": "http://localhost:5000/api/users/user123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users", "user123"]
             }
           }
         },
@@ -196,7 +174,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -204,9 +182,11 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/users/{{user_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["users", "{{user_id}}"]
+              "raw": "http://localhost:5000/api/users/user123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users", "user123"]
             }
           }
         },
@@ -218,7 +198,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -226,9 +206,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/users/stats",
-              "host": ["{{base_url}}"],
-              "path": ["users", "stats"]
+              "raw": "http://localhost:5000/api/users/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users", "stats"]
             }
           }
         }
@@ -246,7 +228,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -254,9 +236,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/categories",
-              "host": ["{{base_url}}"],
-              "path": ["categories"]
+              "raw": "http://localhost:5000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categories"]
             }
           }
         },
@@ -268,7 +252,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -276,35 +260,23 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/categories/{{category_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["categories", "{{category_id}}"]
+              "raw": "http://localhost:5000/api/categories/cat123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categories", "cat123"]
             }
           }
         },
         {
           "name": "Create Category",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('category_id', jsonData.data._id);",
-                  "    console.log('✅ Category created. ID: ' + jsonData.data._id);",
-                  "}"
-                ]
-              }
-            }
-          ],
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -318,12 +290,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"name\": \"Électronique\", \"description\": \"Produits électroniques en général\"}"
+              "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/categories",
-              "host": ["{{base_url}}"],
-              "path": ["categories"]
+              "raw": "http://localhost:5000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categories"]
             }
           }
         },
@@ -335,7 +309,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -349,12 +323,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"name\": \"Électronique & Informatique\", \"description\": \"Produits électroniques et informatiques\"}"
+              "raw": "{\n  \"name\": \"Electronics and Computers\",\n  \"description\": \"Electronic devices, computers and gadgets\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/categories/{{category_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["categories", "{{category_id}}"]
+              "raw": "http://localhost:5000/api/categories/cat123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categories", "cat123"]
             }
           }
         },
@@ -366,7 +342,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -374,9 +350,11 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/categories/{{category_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["categories", "{{category_id}}"]
+              "raw": "http://localhost:5000/api/categories/cat123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categories", "cat123"]
             }
           }
         }
@@ -384,7 +362,7 @@
     },
     {
       "name": "Products",
-      "description": "Product CRUD operations with advanced filtering and search",
+      "description": "Product CRUD operations",
       "item": [
         {
           "name": "Get All Products",
@@ -394,7 +372,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -402,36 +380,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/products?category=&minPrice=&maxPrice=&search=&sortBy=newest",
-              "host": ["{{base_url}}"],
-              "path": ["products"],
-              "query": [
-                {
-                  "key": "category",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "minPrice",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "search",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "sortBy",
-                  "value": "newest",
-                  "disabled": true
-                }
-              ]
+              "raw": "http://localhost:5000/api/products",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "products"]
             }
           }
         },
@@ -443,7 +396,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -451,35 +404,23 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/products/{{product_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["products", "{{product_id}}"]
+              "raw": "http://localhost:5000/api/products/prod123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "products", "prod123"]
             }
           }
         },
         {
           "name": "Create Product",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.environment.set('product_id', jsonData.data._id);",
-                  "    console.log('✅ Product created. ID: ' + jsonData.data._id);",
-                  "}"
-                ]
-              }
-            }
-          ],
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -493,12 +434,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"name\": \"Laptop Dell XPS 13\", \"description\": \"Ordinateur portable haute performance\", \"sku\": \"DELL-XPS-13-001\", \"category\": \"{{category_id}}\", \"price\": 999.99, \"stock\": 50, \"minimumStock\": 10}"
+              "raw": "{\n  \"name\": \"Dell Laptop XPS 13\",\n  \"description\": \"High performance laptop computer\",\n  \"sku\": \"DELL-XPS-13\",\n  \"category\": \"cat123\",\n  \"price\": 999.99,\n  \"stock\": 50,\n  \"minimumStock\": 10\n}"
             },
             "url": {
-              "raw": "{{base_url}}/products",
-              "host": ["{{base_url}}"],
-              "path": ["products"]
+              "raw": "http://localhost:5000/api/products",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "products"]
             }
           }
         },
@@ -510,7 +453,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -524,12 +467,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"name\": \"Laptop Dell XPS 13 Pro\", \"price\": 1099.99, \"stock\": 45}"
+              "raw": "{\n  \"name\": \"Dell Laptop XPS 13 Pro\",\n  \"price\": 1099.99,\n  \"stock\": 45\n}"
             },
             "url": {
-              "raw": "{{base_url}}/products/{{product_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["products", "{{product_id}}"]
+              "raw": "http://localhost:5000/api/products/prod123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "products", "prod123"]
             }
           }
         },
@@ -541,7 +486,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -549,9 +494,11 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/products/{{product_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["products", "{{product_id}}"]
+              "raw": "http://localhost:5000/api/products/prod123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "products", "prod123"]
             }
           }
         },
@@ -563,7 +510,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -571,9 +518,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/products/alerts/low-stock",
-              "host": ["{{base_url}}"],
-              "path": ["products", "alerts", "low-stock"]
+              "raw": "http://localhost:5000/api/products/alerts/low-stock",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "products", "alerts", "low-stock"]
             }
           }
         }
@@ -581,32 +530,17 @@
     },
     {
       "name": "Stock Management",
-      "description": "Stock movements, history, and inventory management",
+      "description": "Stock movements and inventory management",
       "item": [
         {
-          "name": "Stock In (Entry)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ Stock In recorded: ' + jsonData.data.product.name + ' +' + jsonData.data.movement.quantity + ' units');",
-                  "    console.log('   Previous stock: ' + jsonData.data.product.stockBefore);",
-                  "    console.log('   New stock: ' + jsonData.data.product.stockAfter);",
-                  "}"
-                ]
-              }
-            }
-          ],
+          "name": "Stock In - Add Inventory",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -620,42 +554,26 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"product\": \"{{product_id}}\", \"quantity\": 20, \"reason\": \"purchase\", \"details\": \"Achat auprès du fournisseur ABC\", \"reference\": \"BON-ACHAT-2024-001\"}"
+              "raw": "{\n  \"product\": \"prod123\",\n  \"quantity\": 20,\n  \"reason\": \"purchase\",\n  \"details\": \"Purchased from supplier ABC\",\n  \"reference\": \"PO-2024-001\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/stock/in",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "in"]
+              "raw": "http://localhost:5000/api/stock/in",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "stock", "in"]
             }
           }
         },
         {
-          "name": "Stock Out (Exit)",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 201) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ Stock Out recorded: ' + jsonData.data.product.name + ' -' + jsonData.data.movement.quantity + ' units');",
-                  "    console.log('   Previous stock: ' + jsonData.data.product.stockBefore);",
-                  "    console.log('   New stock: ' + jsonData.data.product.stockAfter);",
-                  "} else if (pm.response.code === 400) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('⚠️  Stock out prevented: ' + jsonData.message);",
-                  "}"
-                ]
-              }
-            }
-          ],
+          "name": "Stock Out - Remove Inventory",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -669,43 +587,26 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"product\": \"{{product_id}}\", \"quantity\": 5, \"reason\": \"sale\", \"details\": \"Vente au client XYZ\", \"reference\": \"VENTE-2024-001\"}"
+              "raw": "{\n  \"product\": \"prod123\",\n  \"quantity\": 5,\n  \"reason\": \"sale\",\n  \"details\": \"Sold to customer\",\n  \"reference\": \"SO-2024-001\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/stock/out",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "out"]
+              "raw": "http://localhost:5000/api/stock/out",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "stock", "out"]
             }
           }
         },
         {
-          "name": "Stock Out - NEGATIVE PREVENTION TEST",
-          "description": "This request should FAIL with 400 error (Insufficient Stock). Tests negative stock prevention.",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 400) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ TEST PASSED: Negative stock prevention working!');",
-                  "    console.log('   Error: ' + jsonData.message);",
-                  "    console.log('   Available stock: ' + jsonData.availableStock);",
-                  "    console.log('   Requested: ' + jsonData.requestedQuantity);",
-                  "} else {",
-                  "    console.log('❌ TEST FAILED: Should have been prevented!');",
-                  "}"
-                ]
-              }
-            }
-          ],
+          "name": "Adjust Stock - Correct Inventory",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -719,57 +620,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"product\": \"{{product_id}}\", \"quantity\": 10000, \"reason\": \"sale\", \"details\": \"Test: Try to sell more than stock\"}"
+              "raw": "{\n  \"product\": \"prod123\",\n  \"newStock\": 35,\n  \"details\": \"Inventory correction after physical count\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/stock/out",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "out"]
-            }
-          }
-        },
-        {
-          "name": "Adjust Stock",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    var jsonData = pm.response.json();",
-                  "    console.log('✅ Stock adjusted: ' + jsonData.data.product.name);",
-                  "    console.log('   Previous: ' + jsonData.data.product.stockBefore + ' → New: ' + jsonData.data.product.stockAfter);",
-                  "}"
-                ]
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{jwt_token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\"product\": \"{{product_id}}\", \"newStock\": 35, \"details\": \"Correction inventaire suite au comptage physique\"}"
-            },
-            "url": {
-              "raw": "{{base_url}}/stock/adjust",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "adjust"]
+              "raw": "http://localhost:5000/api/stock/adjust",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "stock", "adjust"]
             }
           }
         },
@@ -781,7 +639,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -789,41 +647,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/stock/history?product=&movementType=&reason=&startDate=&endDate=&sortBy=newest",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "history"],
-              "query": [
-                {
-                  "key": "product",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "movementType",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "reason",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "startDate",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "endDate",
-                  "value": "",
-                  "disabled": true
-                },
-                {
-                  "key": "sortBy",
-                  "value": "newest",
-                  "disabled": true
-                }
-              ]
+              "raw": "http://localhost:5000/api/stock/history",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "stock", "history"]
             }
           }
         },
@@ -835,7 +663,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -843,9 +671,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/stock/history/{{product_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "history", "{{product_id}}"]
+              "raw": "http://localhost:5000/api/stock/history/prod123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "stock", "history", "prod123"]
             }
           }
         },
@@ -857,7 +687,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{jwt_token}}",
+                  "value": "your_jwt_token_here",
                   "type": "string"
                 }
               ]
@@ -865,9 +695,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/stock/stats",
-              "host": ["{{base_url}}"],
-              "path": ["stock", "stats"]
+              "raw": "http://localhost:5000/api/stock/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "stock", "stats"]
             }
           }
         }
@@ -875,48 +707,23 @@
     },
     {
       "name": "Health Check",
-      "description": "Server status verification (no authentication required)",
+      "description": "Server status check (no login needed)",
       "item": [
         {
-          "name": "Health Check",
+          "name": "Check Server Status",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/health",
-              "host": ["{{base_url}}"],
-              "path": ["health"]
+              "raw": "http://localhost:5000/api/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "health"]
             }
           }
         }
       ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost:5000/api",
-      "type": "string"
-    },
-    {
-      "key": "jwt_token",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "user_id",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "category_id",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "product_id",
-      "value": "",
-      "type": "string"
     }
   ]
 }
