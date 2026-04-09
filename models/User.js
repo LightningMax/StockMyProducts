@@ -1,50 +1,43 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-// Schéma de l'utilisateur
 const userSchema = new mongoose.Schema(
   {
-    // Informations de base
     firstName: {
       type: String,
-      required: [true, 'Le prénom est requis'],
+      required: true,
       trim: true,
-      minlength: [2, 'Le prénom doit contenir au moins 2 caractères'],
+      minlength: 1,
     },
     lastName: {
       type: String,
-      required: [true, 'Le nom est requis'],
+      required: true,
       trim: true,
-      minlength: [2, 'Le nom doit contenir au moins 2 caractères'],
+      minlength: 1,
     },
     email: {
       type: String,
-      required: [true, 'Veuillez fournir une adresse email'],
+      required: true,
       unique: true,
       lowercase: true,
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Veuillez fournir une adresse email valide'],
+      match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, // regex pour valider l'email
     },
     password: {
       type: String,
-      required: [true, 'Veuillez fournir un mot de passe'],
-      minlength: [6, 'Le mot de passe doit contenir au moins 6 caractères'],
-      select: false, // N'inclure le mot de passe que si explicitement demandé
+      required: true,
+      minlength: 8,
+      select: false, // inclus le mdp si demande (evite faille de secu)
     },
-    // Rôle de l'utilisateur (RBAC)
+
     role: {
       type: String,
-      enum: {
-        values: ['admin', 'manager', 'user'],
-        message: 'Le rôle doit être admin, manager ou user',
-      },
-      default: 'user',
+      enum: ["admin", "manager", "user"],
+      default: "user",
     },
-    // Statut de l'utilisateur
     isActive: {
       type: Boolean,
       default: true,
     },
-    // Dates de création et modification
     createdAt: {
       type: Date,
       default: Date.now,
@@ -55,29 +48,28 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Met à jour automatiquement createdAt et updatedAt
-  }
+    timestamps: true, // mettre a jour create et update tout seul
+  },
 );
 
-// Pré-traitement : Hash le mot de passe avant de sauvegarder
-userSchema.pre('save', async function (next) {
-  // Sauter le hachage si le mot de passe n'a pas été modifié
-  if (!this.isModified('password')) {
+// hash le mot de passe avant de sauvegarder
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
 
   try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    const saltBcrypt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, saltBcrypt);
     next();
   } catch (error) {
     next(error);
   }
 });
 
-// Méthode pour comparer les mots de passe
+// vérifie les mdp
 userSchema.methods.comparePassword = async function (passwordEntered) {
   return await bcrypt.compare(passwordEntered, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
