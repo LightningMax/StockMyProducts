@@ -20,10 +20,14 @@ const router = express.Router();
  * Seulement les administrateurs et les managers peuvent accéder à ces routes
  */
 
-// Obtenir tous les utilisateurs
+// ================ ROUTE GESTION DES USER ==========================
+// Admin && Manager peuvent acceder au route suivante
+// (Update role valide seulement par Admin)
+
+// recupe tout les user actif | GET /api/users
 router.get("/", authMiddleware, roleMiddleware("admin"), getAllUsers);
 
-// Obtenir un utilisateur par ID
+// recup user par id | GET /api/users/:id
 router.get(
   "/:id",
   authMiddleware,
@@ -32,7 +36,7 @@ router.get(
   getUserById,
 );
 
-// Mettre à jour un utilisateur
+// update user | PUT /api/users/:id
 router.put(
   "/:id",
   authMiddleware,
@@ -42,7 +46,7 @@ router.put(
   updateUser,
 );
 
-// Désactiver un utilisateur
+// supprime un user (soft delete) | DELETE /api/users/:id
 router.delete(
   "/:id",
   authMiddleware,

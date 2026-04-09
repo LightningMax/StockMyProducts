@@ -9,17 +9,15 @@ const {
 
 const router = express.Router();
 
-/**
- * Routes d'authentification
- */
+// ============= ROUTE AUTH =============
 
-// Enregistrer un nouvel utilisateur
+//add new user | POST /api/auth/register
 router.post("/register", validateRegister, handleValidationErrors, register);
 
-// Connexion d'un utilisateur
+// connect user | POST /api/auth/login
 router.post("/login", validateLogin, handleValidationErrors, login);
 
-// Obtenir les informations de l'utilisateur authentifier
+// get info user connecte | GET /api/auth/me
 router.get("/me", authMiddleware, getMe);
 
 module.exports = router;
